@@ -11,16 +11,26 @@ import nets
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--video_dpath', type=str, help="The directory path of videos.")
-    parser.add_argument('-m', '--model', type=str, help="The name of model from which you extract features.")
-    parser.add_argument('-b', '--batch_size', type=int, default=25, help="The batch size.")
-    parser.add_argument('-s', '--stride', type=int, default=5, help="Extract feature from every <s> frames.")
-    parser.add_argument('-o', '--out', type=str, help="The file path of extracted feature.")
+    parser.add_argument('-v', '--video_dpath', type=str, 
+                        default='/nfs/zhujinguo/datasets/open_source_dataset/msvd_dataset/YouTubeClips',
+                        help="The directory path of videos.")
+    parser.add_argument('-m', '--model', type=str, 
+                        default='resnet152',
+                        help="The name of model from which you extract features.")
+    parser.add_argument('-b', '--batch_size', type=int, default=128, help="The batch size.") # 32gv100
+    parser.add_argument('-s', '--stride', type=int, default=1,
+                        help="Extract feature from every <s> frames.")
+    parser.add_argument('-o', '--out', type=str, 
+                        default='feature_resnet152_s1/MSVD_VGG',
+                        help="The file path of extracted feature.")
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_args()
+    
+    if not os.path.exists(os.path.dirname(args.out)):
+        os.makedirs(os.path.dirname(args.out))
 
     config = config[args.model]
 
